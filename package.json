@@ -1,11 +1,9 @@
 {
-  "name": "@redactie/boilerplate-module",
-  "version": "0.0.0-1",
-  "description": "redactie boilerplate module",
-  "main": "dist/redactie-boilerplate-module.umd.js",
-  "module": "dist/redactie-boilerplate-module.umd.js",
+  "name": "@redactie/preview-module",
+  "version": "0.0.0",
+  "description": "redactie preview module",
+  "main": "dist/redactie-preview-module.umd.js",
   "types": "dist/index.d.ts",
-  "jsnext:main": "dist/redactie-boilerplate-module.umd.js",
   "scripts": {
     "prepublish": "npm run test && npm run build",
     "build:types": "tsc --emitDeclarationOnly",
@@ -20,26 +18,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://ex02131@bitbucket.antwerpen.be/scm/wcm/redactie-boilerplate_module.git"
+    "url": "https://bitbucket.antwerpen.be/projects/REDA/repos/redactie-preview_module_react"
   },
   "keywords": [
     "Redactie",
     "React",
-    "Boilerplate",
+    "Preview",
     "Module"
   ],
   "publishConfig": {
     "@redactie:registry": "https://nexusrepo.antwerpen.be/repository/npm-private"
   },
   "devDependencies": {
-    "@babel/core": "7.8.3",
-    "@babel/preset-env": "7.8.3",
-    "@babel/preset-react": "7.8.3",
-    "@babel/preset-typescript": "7.8.3",
+    "@babel/core": "7.14.5",
+    "@babel/preset-env": "7.14.5",
+    "@babel/preset-react": "7.14.5",
+    "@babel/preset-typescript": "7.14.5",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@redactie/module-webpack-plugin": "2.0.0",
     "@redactie/redactie-core": "^2.0.0",
+    "@redactie/utils": "^1.2.1",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
     "@types/jest": "24.9.1",
@@ -47,7 +46,7 @@
     "@types/webpack-env": "^1.15.1",
     "@typescript-eslint/eslint-plugin": "2.17.0",
     "@typescript-eslint/parser": "2.17.0",
-    "babel-jest": "25.1.0",
+    "babel-jest": "27.0.6",
     "clean-webpack-plugin": "3.0.0",
     "concurrently": "5.1.0",
     "eslint": "6.8.0",
@@ -62,6 +61,7 @@
     "node-sass": "4.13.1",
     "npm": "6.13.7",
     "prettier": "1.19.1",
+    "ramda": "^0.27.1",
     "react": "16.12.0",
     "stylelint": "13.0.0",
     "stylelint-config-standard": "19.0.0",
@@ -69,9 +69,7 @@
     "typescript": "3.7.5",
     "webpack": "4.41.5",
     "webpack-bundle-analyzer": "3.6.0",
-    "webpack-cli": "3.3.10",
-    "@redactie/form-renderer-module": "0.17.1",
-    "@redactie/utils": "^1.2.1"
+    "webpack-cli": "3.3.10"
   },
   "author": "Glenn Verschooren",
   "license": "ISC"

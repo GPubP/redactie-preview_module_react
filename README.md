@@ -1,4 +1,4 @@
-# Redactie boilerplate module (React)
+# Redactie preview module (React)
 
 ## How to start?
 
