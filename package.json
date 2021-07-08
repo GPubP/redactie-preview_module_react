@@ -30,12 +30,15 @@
     "@redactie:registry": "https://nexusrepo.antwerpen.be/repository/npm-private"
   },
   "devDependencies": {
+    "@acpaas-ui/react-components": "^6.0.2",
+    "@acpaas-ui/react-editorial-components": "0.0.14",
     "@babel/core": "7.14.5",
     "@babel/preset-env": "7.14.5",
     "@babel/preset-react": "7.14.5",
     "@babel/preset-typescript": "7.14.5",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
+    "@redactie/content-types-module": "^1.0.0",
     "@redactie/module-webpack-plugin": "2.0.0",
     "@redactie/redactie-core": "^2.0.0",
     "@redactie/sites-module": "^1.0.0",
@@ -74,5 +77,6 @@
     "webpack-cli": "3.3.10"
   },
   "author": "Glenn Verschooren",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }
