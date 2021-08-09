@@ -17,14 +17,20 @@ const ContentTypeDetailTab: FC<ExternalTabProps> = ({
 	onCancel,
 }) => {
 	const initialValues: ContentTypeDetailTabFormState = {
-		allowPreview: value?.config?.allowPreview || 'false',
+		allowPreview: value?.config?.allowPreview || false,
 	};
 	const [t] = useCoreTranslation();
 	const [formValue, setFormValue] = useState<any | null>(initialValues);
 	const [hasChanges, resetChangeDetection] = useDetectValueChanges(!isLoading, formValue);
 
 	const onFormSubmit = (values: any): void => {
-		onSubmit({ config: values, validationSchema: {} });
+		onSubmit({
+			config: {
+				...values,
+				allowPreview: values.allowPreview === 'true',
+			},
+			validationSchema: {},
+		});
 		resetChangeDetection();
 	};
 

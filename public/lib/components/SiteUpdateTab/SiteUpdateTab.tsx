@@ -17,7 +17,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 	onCancel,
 }) => {
 	const initialValues: SiteUpdateTabFormState = {
-		allowPreview: value?.config?.allowPreview || 'false',
+		allowPreview: value?.config?.allowPreview || false,
 		baseUrl: value?.config?.baseUrl || '',
 	};
 	const [t] = useCoreTranslation();
@@ -25,7 +25,13 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 	const [hasChanges, resetChangeDetection] = useDetectValueChanges(!isLoading, formValue);
 
 	const onFormSubmit = (): void => {
-		onSubmit({ config: formValue, validationSchema: {} });
+		onSubmit({
+			config: {
+				...formValue,
+				allowPreview: formValue.allowPreview === 'true',
+			},
+			validationSchema: {},
+		});
 		resetChangeDetection();
 	};
 
