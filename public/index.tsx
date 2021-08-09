@@ -39,9 +39,9 @@ registerContentAction(CONFIG.name, {
 			!!allowCTPreview &&
 			!!allowSitePreview &&
 			!!(
-				content.meta.historySummary?.draft.uuid ||
-				content.meta.historySummary?.pendingPublish.uuid ||
-				content.meta.historySummary?.pendingReview.uuid
+				content?.meta.historySummary?.draft.uuid ||
+				content?.meta.historySummary?.pendingPublish.uuid ||
+				content?.meta.historySummary?.pendingReview.uuid
 			)
 		);
 	},
