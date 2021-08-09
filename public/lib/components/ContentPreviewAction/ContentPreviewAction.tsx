@@ -9,6 +9,7 @@ import { CONTENT_STATUS_API_MAP } from './ContentPreviewAction.const';
 
 const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) => {
 	const [revisionId, setRevisionId] = useState<string>('');
+	const [slug, setSlug] = useState<string>('');
 
 	useEffect(() => {
 		const revisionId = pathOr(
@@ -22,6 +23,10 @@ const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) =>
 			contentItem
 		);
 		setRevisionId(revisionId);
+
+		// TODO: Dynamically select active language
+		const slug = pathOr('', ['meta', 'slug', 'nl'], contentItem);
+		setSlug(slug);
 	}, [contentItem, site]);
 
 	const createPreview = async (): Promise<void> => {
@@ -34,7 +39,7 @@ const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) =>
 		const previewConfig = site?.data?.modulesConfig?.find(module => module.name === 'preview');
 
 		const win = window.open(
-			`${previewConfig?.config.baseUrl}?wcm-preview-id=${preview?.uuid}`,
+			`${previewConfig?.config.baseUrl}/${slug}?wcm-preview-id=${preview?.uuid}`,
 			'_blank'
 		);
 
