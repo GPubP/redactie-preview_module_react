@@ -1,4 +1,4 @@
-import { ContentTypeModel } from '@redactie/content-module';
+import { ContentModel, ContentTypeModel } from '@redactie/content-module';
 import { SiteDetailModel } from '@redactie/sites-module';
 
 import { ContentTypeDetailTab } from './lib/components';
@@ -26,7 +26,7 @@ registerSiteUpdateTab(CONFIG.name, {
 registerContentAction(CONFIG.name, {
 	module: CONFIG.module,
 	component: ContentPreviewAction,
-	show: (ct: ContentTypeModel, site: SiteDetailModel) => {
+	show: (ct: ContentTypeModel, site: SiteDetailModel, content: ContentModel) => {
 		const allowCTPreview = ct.modulesConfig?.find(
 			module => module.name === 'preview' && module.config.allowPreview
 		);
@@ -35,6 +35,14 @@ registerContentAction(CONFIG.name, {
 			module => module.name === 'preview' && module.config.allowPreview
 		);
 
-		return !!allowCTPreview && !!allowSitePreview;
+		return (
+			!!allowCTPreview &&
+			!!allowSitePreview &&
+			!!(
+				content.meta.historySummary?.draft.uuid ||
+				content.meta.historySummary?.pendingPublish.uuid ||
+				content.meta.historySummary?.pendingReview.uuid
+			)
+		);
 	},
 });
