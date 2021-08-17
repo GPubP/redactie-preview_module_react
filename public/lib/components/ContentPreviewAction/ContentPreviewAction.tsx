@@ -1,41 +1,29 @@
 import { Button } from '@acpaas-ui/react-components';
 import { ExternalActionProps } from '@redactie/content-module';
-import { pathOr, propOr } from 'ramda';
+import { pathOr } from 'ramda';
 import React, { FC, useEffect, useState } from 'react';
 
 import { previewApiService } from '../../../services/preview';
 
-import { CONTENT_STATUS_API_MAP } from './ContentPreviewAction.const';
-
 const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) => {
-	const [revisionId, setRevisionId] = useState<string>('');
+	const [loading, setLoading] = useState<boolean>(false);
 	const [slug, setSlug] = useState<string>('');
 
 	useEffect(() => {
-		const revisionId = pathOr(
-			'',
-			[
-				'meta',
-				'historySummary',
-				propOr('draft', contentItem.meta.status, CONTENT_STATUS_API_MAP),
-				'uuid',
-			],
-			contentItem
-		);
-		setRevisionId(revisionId);
-
 		// TODO: Dynamically select active language
 		const slug = pathOr('', ['meta', 'slug', 'nl'], contentItem);
 		setSlug(slug);
 	}, [contentItem, site]);
 
 	const createPreview = async (): Promise<void> => {
+		setLoading(true);
 		const preview = await previewApiService.createPreview(
 			site.uuid,
 			contentItem.uuid as string,
-			revisionId
+			null
 		);
 
+		setLoading(false);
 		const previewConfig = site?.data?.modulesConfig?.find(module => module.name === 'preview');
 
 		const win = window.open(
@@ -51,7 +39,7 @@ const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) =>
 	return (
 		<Button
 			onClick={createPreview}
-			icon="eye"
+			icon={loading ? 'circle-o-notch fa-spin' : 'eye'}
 			ariaLabel="Show preview"
 			type="primary"
 			htmlType="button"
