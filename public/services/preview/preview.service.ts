@@ -7,12 +7,16 @@ export class PreviewApiService {
 	public createPreview(
 		siteId: string,
 		contentId: string,
-		revisionId: string
+		revisionId: string | null
 	): Promise<PreviewSchema | null> {
 		return api
-			.post(
-				`${SITE_REQUEST_PREFIX_URL}/${siteId}/content/${contentId}/preview?revisionId=${revisionId}`
-			)
+			.post(`${SITE_REQUEST_PREFIX_URL}/${siteId}/content/${contentId}/preview`, {
+				...(revisionId && {
+					searchParams: {
+						revisionId,
+					},
+				}),
+			})
 			.json();
 	}
 }
