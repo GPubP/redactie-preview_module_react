@@ -3,7 +3,7 @@ import { ExternalActionProps } from '@redactie/content-module';
 import { pathOr } from 'ramda';
 import React, { FC, useEffect, useState } from 'react';
 
-import { previewApiService } from '../../../services/preview';
+import { previewApiService } from '../../services/preview';
 
 const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) => {
 	const [loading, setLoading] = useState<boolean>(false);
