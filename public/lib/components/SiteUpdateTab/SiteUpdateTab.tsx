@@ -1,7 +1,7 @@
 import { Button, RadioGroup, TextField } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import { ExternalTabProps } from '@redactie/sites-module';
-import { FormikOnChangeHandler, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { ChangeEvent, FC, useState } from 'react';
 
