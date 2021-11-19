@@ -1,7 +1,7 @@
 import { Button, RadioGroup, TextField } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import { ExternalTabProps } from '@redactie/sites-module';
-import { FormikOnChangeHandler, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { ChangeEvent, FC, useState } from 'react';
 
@@ -28,7 +28,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 		onSubmit({
 			config: {
 				...formValue,
-				allowPreview: formValue.allowPreview === 'true',
+				allowPreview: formValue.allowPreview,
 			},
 			validationSchema: {},
 		});
@@ -40,7 +40,6 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 			{({ submitForm }) => {
 				return (
 					<>
-						<FormikOnChangeHandler onChange={values => setFormValue(values)} />
 						<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-sm-6">
@@ -49,6 +48,12 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 									id="allowPreview"
 									name="allowPreview"
 									options={PREVIEW_OPTIONS}
+									onChange={(event: ChangeEvent<any>) =>
+										setFormValue({
+											...formValue,
+											allowPreview: event.target.value === 'true',
+										})
+									}
 								/>
 							</div>
 						</div>
