@@ -28,7 +28,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 		onSubmit({
 			config: {
 				...formValue,
-				allowPreview: formValue.allowPreview === 'true',
+				allowPreview: formValue.allowPreview,
 			},
 			validationSchema: {},
 		});
@@ -40,7 +40,6 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 			{({ submitForm }) => {
 				return (
 					<>
-						<FormikOnChangeHandler onChange={values => setFormValue(values)} />
 						<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-sm-6">
@@ -49,6 +48,12 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 									id="allowPreview"
 									name="allowPreview"
 									options={PREVIEW_OPTIONS}
+									onChange={(event: ChangeEvent<any>) =>
+										setFormValue({
+											...formValue,
+											allowPreview: event.target.value === 'true',
+										})
+									}
 								/>
 							</div>
 						</div>
