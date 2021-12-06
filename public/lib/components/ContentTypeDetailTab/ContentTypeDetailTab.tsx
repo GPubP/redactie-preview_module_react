@@ -40,7 +40,7 @@ const ContentTypeDetailTab: FC<ExternalTabProps> = ({
 				return (
 					<>
 						<FormikOnChangeHandler onChange={values => setFormValue(values)} />
-						<p>Bepaal of er voor dit content type voorvertoningen zijn toegestaan.</p>
+						<p>Bepaal of voorvertoningen voor dit content type zijn toegestaan.</p>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-sm-6">
 								<Field
