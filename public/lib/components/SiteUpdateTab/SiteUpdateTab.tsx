@@ -7,6 +7,7 @@ import {
 import { LanguageSchema } from '@redactie/language-module';
 import { ExternalTabProps } from '@redactie/sites-module';
 import {
+	DataLoader,
 	FormikMultilanguageField,
 	FormikOnChangeHandler,
 	Language,
@@ -14,7 +15,7 @@ import {
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, ReactElement, useEffect, useState } from 'react';
 
 import languagesConnector from '../../connectors/languages';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
@@ -30,7 +31,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 	onCancel,
 }) => {
 	const [activeLanguage, setActiveLanguage] = useState<Language | LanguageSchema>();
-	const [, languages] = languagesConnector.hooks.useActiveLanguagesForSite(site.uuid);
+	const [loadingState, languages] = languagesConnector.hooks.useActiveLanguagesForSite(site.uuid);
 
 	const key = activeLanguage?.key;
 	const initialValues: SiteUpdateTabFormState = {
@@ -61,87 +62,111 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 		resetChangeDetection();
 	};
 
-	return (
-		<LanguageHeader
-			languages={languages}
-			activeLanguage={activeLanguage}
-			onChangeLanguage={(language: string) => setActiveLanguage({ key: language })}
-		>
-			<Formik onSubmit={onFormSubmit} initialValues={initialValues}>
-				{({ submitForm }) => {
-					return (
-						<div className="u-margin-top">
-							<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
-							<div className="row u-margin-top">
-								<FormikOnChangeHandler
-									onChange={values =>
-										setFormValue(values as SiteUpdateTabFormState)
-									}
-								/>
-								<div className="col-xs-12 col-sm-6">
-									<Field
-										as={RadioGroup}
-										id="allowPreview"
-										name="allowPreview"
-										options={PREVIEW_OPTIONS}
-										onChange={(event: ChangeEvent<any>) =>
-											setFormValue({
-												...formValue,
-												allowPreview: event.target.value === 'true',
-											})
-										}
-									/>
-								</div>
-							</div>
-							<div className="row u-margin-top">
-								<div className="col-xs-12 col-sm-6">
-									<FormikMultilanguageField
-										id="baseUrl"
-										name="baseUrl"
-										asComponent={TextField}
-										value={
-											formValue.baseUrl[`${key}`]
-												? formValue.baseUrl[`${key}`]
-												: ''
-										}
-										label="Url voor voorvertoning"
-									/>
-								</div>
-							</div>
+	const renderForm = (): ReactElement | null => {
+		if (!languages) {
+			return null;
+		}
 
-							<ActionBar className="o-action-bar--fixed" isOpen>
-								<ActionBarContentSection>
-									<div className="u-wrapper row end-xs">
-										<Button
-											className="u-margin-right-xs"
-											onClick={onCancel}
-											negative
-										>
-											{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-										</Button>
-										<Button
-											iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}
-											disabled={isLoading || !hasChanges}
-											onClick={submitForm}
-											type="success"
-											htmlType="submit"
-										>
-											{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-										</Button>
+		return (
+			<LanguageHeader
+				languages={languages}
+				activeLanguage={activeLanguage}
+				onChangeLanguage={(language: string) => setActiveLanguage({ key: language })}
+			>
+				<Formik onSubmit={onFormSubmit} initialValues={initialValues}>
+					{({ submitForm }) => {
+						return (
+							<div className="u-margin-top">
+								<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
+								<div className="row u-margin-top">
+									<FormikOnChangeHandler
+										onChange={values =>
+											setFormValue(values as SiteUpdateTabFormState)
+										}
+									/>
+									<div className="col-xs-12 col-sm-6">
+										<Field
+											as={RadioGroup}
+											id="allowPreview"
+											name="allowPreview"
+											options={PREVIEW_OPTIONS}
+											onChange={(event: ChangeEvent<any>) =>
+												setFormValue({
+													...formValue,
+													allowPreview: event.target.value === 'true',
+												})
+											}
+										/>
 									</div>
-								</ActionBarContentSection>
-							</ActionBar>
-							<LeavePrompt
-								shouldBlockNavigationOnConfirm
-								when={hasChanges}
-								onConfirm={submitForm}
-							/>
-						</div>
-					);
-				}}
-			</Formik>
-		</LanguageHeader>
-	);
-};
+								</div>
+								<div className="row u-margin-top">
+									<div className="col-xs-12 col-sm-6">
+										{languages.length === 0 ? (
+											<TextField
+												id="baseUrl"
+												name="baseUrl"
+												label="Url voor voorvertoning"
+												value={formValue.baseUrl}
+												onChange={(event: ChangeEvent<any>) =>
+													setFormValue({
+														...formValue,
+														baseUrl: event.target.value,
+													})
+												}
+											/>
+										) : (
+											<FormikMultilanguageField
+												id="baseUrl"
+												name="baseUrl"
+												asComponent={TextField}
+												value={
+													formValue.baseUrl[`${key}`]
+														? formValue.baseUrl[`${key}`]
+														: ''
+												}
+												label="Url voor voorvertoning"
+											/>
+										)}
+									</div>
+								</div>
 
+								<ActionBar className="o-action-bar--fixed" isOpen>
+									<ActionBarContentSection>
+										<div className="u-wrapper row end-xs">
+											<Button
+												className="u-margin-right-xs"
+												onClick={onCancel}
+												negative
+											>
+												{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+											</Button>
+											<Button
+												iconLeft={
+													isLoading ? 'circle-o-notch fa-spin' : null
+												}
+												disabled={isLoading || !hasChanges}
+												onClick={submitForm}
+												type="success"
+												htmlType="submit"
+											>
+												{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+											</Button>
+										</div>
+									</ActionBarContentSection>
+								</ActionBar>
+								<LeavePrompt
+									shouldBlockNavigationOnConfirm
+									when={hasChanges}
+									onConfirm={submitForm}
+								/>
+							</div>
+						);
+					}}
+				</Formik>
+			</LanguageHeader>
+		);
+	};
+
+	return <DataLoader loadingState={loadingState} render={renderForm} />;
+};
 export default SiteUpdateTab;
