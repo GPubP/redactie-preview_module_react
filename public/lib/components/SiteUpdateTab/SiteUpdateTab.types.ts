@@ -1,4 +1,7 @@
 export interface SiteUpdateTabFormState {
 	allowPreview: 'true' | 'false';
-	baseUrl: string;
+	baseUrl: {
+		multilanguage: boolean;
+		[lang: string]: string | boolean;
+	};
 }
