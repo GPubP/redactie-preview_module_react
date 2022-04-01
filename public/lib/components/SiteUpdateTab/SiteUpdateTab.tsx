@@ -121,11 +121,6 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 											name="baseUrl"
 											asComponent={TextField}
 											className="col-xs-12 col-sm-6"
-											value={
-												formValue.baseUrl[`${key}`]
-													? formValue.baseUrl[`${key}`]
-													: ''
-											}
 											label="Url voor voorvertoning"
 										/>
 									</div>
