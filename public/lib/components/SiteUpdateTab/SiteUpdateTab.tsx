@@ -36,10 +36,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 	const key = activeLanguage?.key;
 	const initialValues: SiteUpdateTabFormState = {
 		allowPreview: value?.config?.allowPreview || false,
-		baseUrl: {
-			multilanguage: true,
-			[key ? key : 'nl']: value?.config?.baseUrl ? value?.config?.baseUrl[`${key}`] || value?.config?.baseUrl || '' : '',
-		},
+		baseUrl: value?.config?.baseUrl ? value?.config?.baseUrl : '',
 	};
 	const [t] = useCoreTranslation();
 	const [formValue, setFormValue] = useState<any | null>(initialValues);
@@ -99,14 +96,15 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 										/>
 									</div>
 								</div>
-								<div className="row u-margin-top">
-									<div className="col-xs-12 col-sm-6">
-										{languages.length === 0 ? (
+
+								{languages.length === 0 ? (
+									<div className="row u-margin-top">
+										<div className="col-xs-12 col-sm-6">
 											<TextField
 												id="baseUrl.nl"
 												name="baseUrl.nl"
 												label="Url voor voorvertoning"
-												value={formValue.baseUrl.nl}
+												value={formValue.baseUrl}
 												onChange={(event: ChangeEvent<any>) =>
 													setFormValue({
 														...formValue,
@@ -114,21 +112,24 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 													})
 												}
 											/>
-										) : (
-											<FormikMultilanguageField
-												id="baseUrl"
-												name="baseUrl"
-												asComponent={TextField}
-												value={
-													formValue.baseUrl[`${key}`]
-														? formValue.baseUrl[`${key}`]
-														: ''
-												}
-												label="Url voor voorvertoning"
-											/>
-										)}
+										</div>
 									</div>
-								</div>
+								) : (
+									<div className="u-margin-top">
+										<FormikMultilanguageField
+											id="baseUrl"
+											name="baseUrl"
+											asComponent={TextField}
+											className="col-xs-12 col-sm-6"
+											value={
+												formValue.baseUrl[`${key}`]
+													? formValue.baseUrl[`${key}`]
+													: ''
+											}
+											label="Url voor voorvertoning"
+										/>
+									</div>
+								)}
 
 								<ActionBar className="o-action-bar--fixed" isOpen>
 									<ActionBarContentSection>
