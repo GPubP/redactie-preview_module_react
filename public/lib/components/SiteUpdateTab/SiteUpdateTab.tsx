@@ -73,7 +73,6 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 				activeLanguage={activeLanguage}
 				onChangeLanguage={(language: string) => setActiveLanguage({ key: language })}
 			>
-				{console.info(value.config)}
 				<Formik onSubmit={onFormSubmit} initialValues={initialValues}>
 					{({ submitForm }) => {
 						return (
