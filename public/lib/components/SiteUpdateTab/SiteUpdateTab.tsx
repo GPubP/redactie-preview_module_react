@@ -33,7 +33,6 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 	const [activeLanguage, setActiveLanguage] = useState<Language | LanguageSchema>();
 	const [loadingState, languages] = languagesConnector.hooks.useActiveLanguagesForSite(site.uuid);
 
-	const key = activeLanguage?.key;
 	const initialValues: SiteUpdateTabFormState = {
 		allowPreview: value?.config?.allowPreview || false,
 		baseUrl: value?.config?.baseUrl ? value?.config?.baseUrl : '',
