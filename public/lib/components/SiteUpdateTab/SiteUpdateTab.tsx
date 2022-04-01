@@ -38,7 +38,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 		allowPreview: value?.config?.allowPreview || false,
 		baseUrl: {
 			multilanguage: true,
-			[key ? key : 'nl']: value?.config?.baseUrl[`${key}`] || value?.config?.baseUrl || '',
+			[key ? key : 'nl']: !value.config ? value?.config?.baseUrl[`${key}`] || value?.config?.baseUrl || '' : '',
 		},
 	};
 	const [t] = useCoreTranslation();
@@ -73,6 +73,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 				activeLanguage={activeLanguage}
 				onChangeLanguage={(language: string) => setActiveLanguage({ key: language })}
 			>
+				{console.info(value.config)}
 				<Formik onSubmit={onFormSubmit} initialValues={initialValues}>
 					{({ submitForm }) => {
 						return (
