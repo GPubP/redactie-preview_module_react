@@ -103,10 +103,10 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 									<div className="col-xs-12 col-sm-6">
 										{languages.length === 0 ? (
 											<TextField
-												id="baseUrl"
-												name="baseUrl"
+												id="baseUrl.nl"
+												name="baseUrl.nl"
 												label="Url voor voorvertoning"
-												value={formValue.baseUrl}
+												value={formValue.baseUrl.nl}
 												onChange={(event: ChangeEvent<any>) =>
 													setFormValue({
 														...formValue,
