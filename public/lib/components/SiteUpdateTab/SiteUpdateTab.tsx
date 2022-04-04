@@ -119,7 +119,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({
 											id="baseUrl"
 											name="baseUrl"
 											asComponent={TextField}
-											className="col-xs-12 col-sm-6"
+											className="u-w-50"
 											label="Url voor voorvertoning"
 										/>
 									</div>
