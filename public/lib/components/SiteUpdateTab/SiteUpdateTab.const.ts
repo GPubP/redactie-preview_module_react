@@ -7,7 +7,7 @@ export const FORM_VALIDATION_SCHEMA = (languages: LanguageSchema[]): typeof Mult
 			languages,
 			MultilanguageYup.string()
 				.required('Url is een verplicht veld')
-				.url('Url moet valid zijn')
+				.url('Url moet geldig zijn')
 		),
 	});
 
