@@ -83,7 +83,12 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 						<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
 						<div className="row u-margin-top">
 							<FormikOnChangeHandler
-								onChange={values => setFormValue(values as SiteUpdateTabFormState)}
+								onChange={values =>
+									setFormValue({
+										...(values as SiteUpdateTabFormState),
+										allowPreview: value.allowPreview === 'true',
+									})
+								}
 								onError={handleOnError}
 							/>
 							<div className="col-xs-12 col-sm-6">
@@ -92,12 +97,6 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 									id="allowPreview"
 									name="allowPreview"
 									options={PREVIEW_OPTIONS}
-									onChange={(event: ChangeEvent<any>) =>
-										setFormValue({
-											...formValue,
-											allowPreview: event.target.value === 'true',
-										})
-									}
 								/>
 							</div>
 						</div>
@@ -110,12 +109,6 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 										name="baseUrl.nl"
 										label="Url voor voorvertoning"
 										value={formValue.baseUrl}
-										onChange={(event: ChangeEvent<any>) =>
-											setFormValue({
-												...formValue,
-												baseUrl: event.target.value,
-											})
-										}
 									/>
 								</div>
 							</div>
