@@ -3,12 +3,16 @@ import { MultilanguageYup } from '@redactie/utils';
 
 export const FORM_VALIDATION_SCHEMA = (languages: LanguageSchema[]): typeof MultilanguageYup =>
 	MultilanguageYup.object().shape({
-		baseUrl: MultilanguageYup.object().validateMultiLanguage(
-			languages,
-			MultilanguageYup.string()
-				.required('Url is een verplicht veld')
-				.url('Url moet geldig zijn')
-		),
+		allowPreview: MultilanguageYup.boolean(),
+		baseUrl: MultilanguageYup.object().when('allowPreview', {
+			is: true,
+			then: MultilanguageYup.object().validateMultiLanguage(
+				languages,
+				MultilanguageYup.string()
+					.required('Url is een verplicht veld')
+					.url('Url moet geldig zijn')
+			),
+		}),
 	});
 
 export const PREVIEW_OPTIONS = [

@@ -122,6 +122,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 										asComponent={TextField}
 										className="u-w-50"
 										label="Url voor voorvertoning"
+										value={formValue.baseUrl}
 									/>
 								</div>
 							))}
