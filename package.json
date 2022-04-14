@@ -1,6 +1,6 @@
 {
   "name": "@redactie/preview-module",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "redactie preview module",
   "main": "dist/redactie-preview-module.umd.js",
   "types": "dist/index.d.ts",
