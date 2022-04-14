@@ -15,7 +15,7 @@ import {
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { Field, Formik, FormikErrors, FormikValues } from 'formik';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 
 import languagesConnector from '../../connectors/languages';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
@@ -53,10 +53,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 
 	const onFormSubmit = (): void => {
 		onSubmit({
-			config: {
-				...formValue,
-				allowPreview: formValue.allowPreview,
-			},
+			config: formValue,
 			validationSchema: {},
 		});
 		resetChangeDetection();
@@ -84,7 +81,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 			initialValues={initialValues}
 			validationSchema={() => FORM_VALIDATION_SCHEMA(languages)}
 		>
-			{({ submitForm }) => {
+			{({ submitForm, setFieldValue }) => {
 				return (
 					<div className="u-margin-top">
 						<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
@@ -99,10 +96,16 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 									id="allowPreview"
 									name="allowPreview"
 									options={PREVIEW_OPTIONS}
+									onChange={(event: ChangeEvent<HTMLInputElement>) => {
+										setFieldValue(
+											'allowPreview',
+											event.target.value === 'true'
+										);
+									}}
 								/>
 							</div>
 						</div>
-						{formValue.allowPreview === 'true' &&
+						{!!formValue.allowPreview &&
 							(languages.length === 0 ? (
 								<div className="row u-margin-top">
 									<div className="col-xs-12 col-sm-6">
