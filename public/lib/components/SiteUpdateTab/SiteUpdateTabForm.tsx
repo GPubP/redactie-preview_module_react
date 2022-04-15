@@ -15,7 +15,6 @@ import {
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { Field, Formik, FormikErrors, FormikValues } from 'formik';
-import { pathOr } from 'ramda';
 import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 
 import languagesConnector from '../../connectors/languages';
@@ -24,12 +23,15 @@ import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translat
 import { FORM_VALIDATION_SCHEMA, PREVIEW_OPTIONS } from './SiteUpdateTab.const';
 import { SiteUpdateTabFormState } from './SiteUpdateTab.types';
 
-const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
+const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
+	onChangeFormValue: (values: SiteUpdateTabFormState) => void;
+}> = ({
 	value = {} as Record<string, any>,
 	site,
 	isLoading,
 	onSubmit,
 	onCancel,
+	onChangeFormValue,
 }) => {
 	const [activeLanguage, setActiveLanguage] = useState<Language | LanguageSchema>();
 	const [, languages] = languagesConnector.hooks.useActiveLanguagesForSite(site.uuid);
@@ -51,10 +53,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 
 	const onFormSubmit = (): void => {
 		onSubmit({
-			config: {
-				...formValue,
-				allowPreview: formValue.allowPreview,
-			},
+			config: formValue,
 			validationSchema: {},
 		});
 		resetChangeDetection();
@@ -67,6 +66,11 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 		setErrors(newErrors);
 	};
 
+	const onChangeValues = (values: FormikValues): void => {
+		setFormValue(values as SiteUpdateTabFormState);
+		onChangeFormValue(values as SiteUpdateTabFormState);
+	};
+
 	if (!languages) {
 		return <></>;
 	}
@@ -77,13 +81,13 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 			initialValues={initialValues}
 			validationSchema={() => FORM_VALIDATION_SCHEMA(languages)}
 		>
-			{({ submitForm, errors }) => {
+			{({ submitForm, setFieldValue }) => {
 				return (
 					<div className="u-margin-top">
 						<p>Bepaal of er voor deze site voorvertoningen zijn toegestaan.</p>
 						<div className="row u-margin-top">
 							<FormikOnChangeHandler
-								onChange={values => setFormValue(values as SiteUpdateTabFormState)}
+								onChange={onChangeValues}
 								onError={handleOnError}
 							/>
 							<div className="col-xs-12 col-sm-6">
@@ -92,43 +96,39 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 									id="allowPreview"
 									name="allowPreview"
 									options={PREVIEW_OPTIONS}
-									onChange={(event: ChangeEvent<any>) =>
-										setFormValue({
-											...formValue,
-											allowPreview: event.target.value === 'true',
-										})
-									}
+									onChange={(event: ChangeEvent<HTMLInputElement>) => {
+										setFieldValue(
+											'allowPreview',
+											event.target.value === 'true'
+										);
+									}}
 								/>
 							</div>
 						</div>
-
-						{languages.length === 0 ? (
-							<div className="row u-margin-top">
-								<div className="col-xs-12 col-sm-6">
-									<TextField
-										id="baseUrl.nl"
-										name="baseUrl.nl"
+						{!!formValue.allowPreview &&
+							(languages.length === 0 ? (
+								<div className="row u-margin-top">
+									<div className="col-xs-12 col-sm-6">
+										<TextField
+											id="baseUrl.nl"
+											name="baseUrl.nl"
+											label="Url voor voorvertoning"
+											value={formValue.baseUrl}
+										/>
+									</div>
+								</div>
+							) : (
+								<div className="u-margin-top">
+									<FormikMultilanguageField
+										id="baseUrl"
+										name="baseUrl"
+										asComponent={TextField}
+										className="u-w-50"
 										label="Url voor voorvertoning"
 										multiLang={languages.length > 1 && true}
 									/>
 								</div>
-							</div>
-						) : (
-							<div className="u-margin-top">
-								<FormikMultilanguageField
-									id="baseUrl"
-									name="baseUrl"
-									asComponent={TextField}
-									className="u-w-50"
-									label="Url voor voorvertoning"
-									state={
-										activeLanguage &&
-										pathOr(null, ['baseUrl', activeLanguage.key])(errors) &&
-										'error'
-									}
-								/>
-							</div>
-						)}
+							))}
 
 						<ActionBar className="o-action-bar--fixed" isOpen>
 							<ActionBarContentSection>
