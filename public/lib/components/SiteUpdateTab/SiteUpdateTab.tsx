@@ -21,7 +21,7 @@ const SiteUpdateTab: FC<ExternalTabProps> = ({ value, site, isLoading, onSubmit,
 	}, [activeLanguage, languages]);
 
 	const onChangeFormValue = (values: SiteUpdateTabFormState): void => {
-		setVisibility(values.allowPreview === 'true');
+		setVisibility(values.allowPreview);
 	};
 
 	const renderForm = (): ReactElement | null => {
