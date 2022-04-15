@@ -109,13 +109,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'>> = ({
 										id="baseUrl.nl"
 										name="baseUrl.nl"
 										label="Url voor voorvertoning"
-										value={formValue.baseUrl}
-										onChange={(event: ChangeEvent<any>) =>
-											setFormValue({
-												...formValue,
-												baseUrl: event.target.value,
-											})
-										}
+										multiLang={languages.length > 1 && true}
 									/>
 								</div>
 							</div>
