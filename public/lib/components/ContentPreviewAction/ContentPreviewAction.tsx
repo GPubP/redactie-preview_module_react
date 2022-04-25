@@ -5,7 +5,7 @@ import React, { FC, useEffect, useState } from 'react';
 
 import { previewApiService } from '../../services/preview';
 
-const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) => {
+const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem, activeLanguage }) => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [slug, setSlug] = useState<string>('');
 
@@ -27,7 +27,8 @@ const ContentPreviewAction: FC<ExternalActionProps> = ({ site, contentItem }) =>
 		const previewConfig = site?.data?.modulesConfig?.find(module => module.name === 'preview');
 
 		const win = window.open(
-			`${previewConfig?.config.baseUrl}/${slug}?wcm-preview-id=${preview?.uuid}`,
+			`${previewConfig?.config.baseUrl[activeLanguage!] ||
+				previewConfig?.config.baseUrl}/${slug}?wcm-preview-id=${preview?.uuid}`,
 			'_blank'
 		);
 
