@@ -127,7 +127,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 										className="u-w-50"
 										label="Url voor voorvertoning"
 										multiLang={languages.length > 1}
-										value={formValue.baseUrl[activeLanguage?.key] || formValue.baseUrl[primaryLanguage?.key!] || ''}
+										value={formValue.baseUrl[activeLanguage?.key] === undefined ? formValue.baseUrl[primaryLanguage?.key!] || '' : formValue.baseUrl[activeLanguage?.key]}
 									/>
 								</div>
 							))}
