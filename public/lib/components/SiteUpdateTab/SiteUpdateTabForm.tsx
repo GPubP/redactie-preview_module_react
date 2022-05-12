@@ -33,7 +33,8 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 	onCancel,
 	onChangeFormValue,
 }) => {
-	const [activeLanguage, setActiveLanguage] = useState<Language | LanguageSchema>();
+	const { activeLanguage } = useContext(LanguageHeaderContext);
+	const [primaryLanguage, setPrimaryLanguage] = useState<Language | LanguageSchema>();
 	const [, languages] = languagesConnector.hooks.useActiveLanguagesForSite(site.uuid);
 	const { setErrors } = useContext(LanguageHeaderContext);
 
@@ -46,10 +47,10 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 	const [hasChanges, resetChangeDetection] = useDetectValueChanges(!isLoading, formValue);
 
 	useEffect(() => {
-		if (Array.isArray(languages) && !activeLanguage) {
-			setActiveLanguage(languages.find(l => l.primary) || languages[0]);
+		if (Array.isArray(languages) && !primaryLanguage) {
+			setPrimaryLanguage(languages.find(l => l.primary) || languages[0]);
 		}
-	}, [activeLanguage, languages]);
+	}, [primaryLanguage, languages]);
 
 	const onFormSubmit = (): void => {
 		onSubmit({
@@ -126,6 +127,7 @@ const SiteUpdateTabForm: FC<Omit<ExternalTabProps, 'updateSite'> & {
 										className="u-w-50"
 										label="Url voor voorvertoning"
 										multiLang={languages.length > 1}
+										value={formValue.baseUrl[activeLanguage?.key] || formValue.baseUrl[primaryLanguage?.key!] || ''}
 									/>
 								</div>
 							))}
